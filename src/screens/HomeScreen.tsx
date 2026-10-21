@@ -5,9 +5,10 @@ import type { Game } from '../game/useGame';
 
 interface Props {
   game: Game;
+  saveError: boolean;
 }
 
-export function HomeScreen({ game }: Props) {
+export function HomeScreen({ game, saveError }: Props) {
   const { status } = game;
   const finished = status === 'won' || status === 'lost';
 
@@ -35,6 +36,11 @@ export function HomeScreen({ game }: Props) {
         )}
       </div>
       <p className="hint">{game.hint}</p>
+      {finished && saveError && (
+        <p className="error-text" role="alert">
+          לא הצלחנו לשמור את התוצאה בהיסטוריה.
+        </p>
+      )}
       <div className="actions">
         {status === 'idle' && (
           <button type="button" className="btn btn-primary" onClick={game.startGame}>

@@ -175,6 +175,7 @@ export function useGame(screen: ScreenId) {
 
   return {
     status,
+    gameId: state.gameId,
     displayedRound,
     completedRounds: state.completedRounds,
     outcome: state.outcome,

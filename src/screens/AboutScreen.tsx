@@ -1,4 +1,18 @@
-export function AboutScreen() {
+import { useCallback, useState } from 'react';
+import { ConfirmDialog } from '../components/ConfirmDialog';
+import { HistoryCard } from '../components/HistoryCard';
+import type { History } from '../history/useHistory';
+
+export function AboutScreen({ history }: { history: History }) {
+  const [confirming, setConfirming] = useState(false);
+  const { results, loadError, deleteError, deleteAll } = history;
+
+  const cancel = useCallback(() => setConfirming(false), []);
+  const confirm = useCallback(() => {
+    deleteAll();
+    setConfirming(false);
+  }, [deleteAll]);
+
   return (
     <main className="screen about">
       <header className="screen-header">
@@ -11,8 +25,32 @@ export function AboutScreen() {
       </section>
       <section className="history">
         <h2>10 המשחקים האחרונים</h2>
-        <p className="empty">אין עדיין משחקים שמורים.</p>
+        {loadError && (
+          <p className="error-text" role="alert">
+            לא ניתן לקרוא את ההיסטוריה השמורה במכשיר.
+          </p>
+        )}
+        {deleteError && (
+          <p className="error-text" role="alert">
+            לא הצלחנו למחוק את ההיסטוריה. נסו שוב.
+          </p>
+        )}
+        {results.length === 0 ? (
+          <p className="empty">אין עדיין משחקים שמורים.</p>
+        ) : (
+          <>
+            <ul className="history-list">
+              {results.map((r) => (
+                <HistoryCard key={r.id} result={r} />
+              ))}
+            </ul>
+            <button type="button" className="btn btn-secondary" onClick={() => setConfirming(true)}>
+              מחק היסטוריה
+            </button>
+          </>
+        )}
       </section>
+      {confirming && <ConfirmDialog onCancel={cancel} onConfirm={confirm} />}
     </main>
   );
 }

@@ -4,15 +4,21 @@ import { RotateNotice } from './components/RotateNotice';
 import { HomeScreen } from './screens/HomeScreen';
 import { AboutScreen } from './screens/AboutScreen';
 import { useGame } from './game/useGame';
+import { useHistory } from './history/useHistory';
 
 export function App() {
   const [screen, setScreen] = useState<Screen>('home');
   // Game state lives here so switching screens never tears it down; leaving Home pauses it
   const game = useGame(screen);
+  const history = useHistory(game);
 
   return (
     <div className="app">
-      {screen === 'home' ? <HomeScreen game={game} /> : <AboutScreen />}
+      {screen === 'home' ? (
+        <HomeScreen game={game} saveError={history.saveError} />
+      ) : (
+        <AboutScreen history={history} />
+      )}
       <NavBar screen={screen} onChange={setScreen} />
       <RotateNotice />
     </div>

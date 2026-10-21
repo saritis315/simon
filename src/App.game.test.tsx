@@ -43,6 +43,7 @@ async function startAndReachInput(first: ColorId = 'green') {
 beforeEach(() => {
   vi.useFakeTimers();
   vi.clearAllMocks();
+  localStorage.clear();
   vi.mocked(audio.unlock).mockResolvedValue(true);
   vi.mocked(audio.playColor).mockReturnValue(stopSound);
   vi.mocked(randomColor).mockImplementation(() => queue.shift() ?? 'green');
@@ -253,7 +254,7 @@ describe('game flow', () => {
     expect(screen.getByText('המשחק מציג את הרצף')).toBeInTheDocument();
   });
 
-  it('starts from idle after a remount and stores nothing in localStorage', async () => {
+  it('starts from idle after a remount and stores no active game in localStorage', async () => {
     await startAndReachInput();
     expect(localStorage.length).toBe(0);
     document.body.innerHTML = '';
