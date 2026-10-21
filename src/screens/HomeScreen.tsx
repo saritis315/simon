@@ -1,5 +1,6 @@
 import { SimonBoard } from '../components/SimonBoard';
 import { ResultDialog } from '../components/ResultDialog';
+import { UpdateBanner } from '../components/UpdateBanner';
 import { MAX_ROUNDS } from '../game/config';
 import type { Game } from '../game/useGame';
 
@@ -63,6 +64,8 @@ export function HomeScreen({ game, saveError }: Props) {
           </button>
         )}
       </div>
+      {/* Updates are only offered before a game starts, never during or while paused */}
+      {status === 'idle' && <UpdateBanner />}
     </main>
   );
 }

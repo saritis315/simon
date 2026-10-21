@@ -390,6 +390,18 @@ h3 {
   border: 0;
 }
 
+/* Update banner */
+.update-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+  padding: var(--s2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
 /* Navigation */
 .navbar {
   display: flex;
