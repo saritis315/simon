@@ -132,6 +132,44 @@ h3 {
   opacity: 1;
 }
 
+.quad:not(:disabled) {
+  cursor: pointer;
+}
+
+.quad {
+  transition:
+    opacity 80ms linear,
+    filter 80ms linear,
+    box-shadow 80ms linear;
+}
+
+/* Sequence playback and paused: all dimmed except the lit quadrant */
+.board.dim .quad {
+  opacity: 0.35;
+}
+
+.board .quad.lit {
+  opacity: 1;
+  filter: brightness(1.25);
+  box-shadow: 0 0 28px 6px currentColor;
+}
+
+.quad-green {
+  color: var(--green);
+}
+
+.quad-red {
+  color: var(--red);
+}
+
+.quad-yellow {
+  color: var(--yellow);
+}
+
+.quad-blue {
+  color: var(--blue);
+}
+
 .quad-green {
   background: var(--green);
   border-top-left-radius: 100%;
@@ -189,6 +227,52 @@ h3 {
   box-shadow: 0 6px 16px rgba(0, 163, 255, 0.35);
 }
 
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid var(--border);
+}
+
+.board-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.hint {
+  min-height: 24px;
+  text-align: center;
+  color: var(--soft-gray);
+}
+
+/* End-of-game message over the board */
+.result {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(86%, 300px);
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s4) var(--s3);
+  text-align: center;
+  background: var(--bg);
+  border: 2px solid var(--blue);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.result-won h2 {
+  color: var(--green);
+}
+
+.result-lost h2 {
+  color: var(--red);
+}
+
 /* About */
 .card {
   background: var(--surface);
@@ -236,6 +320,12 @@ h3 {
 .nav-item.active {
   background: var(--blue);
   color: var(--white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quad {
+    transition: none;
+  }
 }
 
 /* Landscape notice */

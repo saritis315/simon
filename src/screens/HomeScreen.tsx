@@ -1,18 +1,61 @@
 import { SimonBoard } from '../components/SimonBoard';
+import { ResultDialog } from '../components/ResultDialog';
+import { MAX_ROUNDS } from '../game/config';
+import type { Game } from '../game/useGame';
 
-export function HomeScreen() {
+interface Props {
+  game: Game;
+}
+
+export function HomeScreen({ game }: Props) {
+  const { status } = game;
+  const finished = status === 'won' || status === 'lost';
+
   return (
     <main className="screen home">
       <header className="screen-header">
         <h1>סיימון</h1>
       </header>
-      <h3 className="round-indicator">שלב 1 מתוך 10</h3>
-      <div className="status-line" aria-hidden="true" />
-      <SimonBoard />
+      <h3 className="round-indicator">
+        שלב {game.displayedRound} מתוך {MAX_ROUNDS}
+      </h3>
+      <div className="status-line" aria-live="polite">
+        {game.statusText}
+      </div>
+      <div className="board-wrap">
+        <SimonBoard
+          litColor={game.litColor}
+          dimmed={status === 'presenting' || status === 'paused'}
+          disabled={status !== 'awaitingInput'}
+          onPressStart={game.pressStart}
+          onPressEnd={game.pressEnd}
+        />
+        {finished && game.outcome && (
+          <ResultDialog outcome={game.outcome} completedRounds={game.completedRounds} />
+        )}
+      </div>
+      <p className="hint">{game.hint}</p>
       <div className="actions">
-        <button type="button" className="btn btn-primary">
-          התחל משחק
-        </button>
+        {status === 'idle' && (
+          <button type="button" className="btn btn-primary" onClick={game.startGame}>
+            התחל משחק
+          </button>
+        )}
+        {status === 'paused' && (
+          <>
+            <button type="button" className="btn btn-primary" onClick={game.resumeGame}>
+              המשך משחק
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={game.newGame}>
+              משחק חדש
+            </button>
+          </>
+        )}
+        {finished && (
+          <button type="button" className="btn btn-primary" onClick={game.dismiss}>
+            אישור
+          </button>
+        )}
       </div>
     </main>
   );
